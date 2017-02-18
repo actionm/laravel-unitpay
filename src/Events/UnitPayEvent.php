@@ -22,7 +22,7 @@ class UnitPayEvent
     {
         $this->type = $type;
         $this->title = $details['title'];
-        $this->details = print_r($details['request'],true);
+        $this->details = print_r($details['request'], true);
         $this->ip = $details['ip'];
     }
 }

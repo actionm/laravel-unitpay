@@ -2,26 +2,23 @@
 
 namespace ActionM\UnitPay;
 
-use Illuminate\Contracts\Events\Dispatcher;
-
 use ActionM\UnitPay\Events\UnitPayEvent;
+use Illuminate\Contracts\Events\Dispatcher;
 use ActionM\UnitPay\Exceptions\InvalidConfiguration;
 
 class UnitPayNotifier
 {
-
     /**
-     * register Notifier
+     * register Notifier.
      */
     public function subscribe(Dispatcher $events)
     {
         // Listen events and send notification
         $events->listen(UnitPayEvent::class, function ($event) {
+            $event->type = str_replace('unitpay.', '', $event->type);
 
-            $event->type = str_replace('unitpay.','',$event->type);
-
-            if (!in_array($event->type,['info','success','error'])) {
-                $event->type='error';
+            if (! in_array($event->type, ['info', 'success', 'error'])) {
+                $event->type = 'error';
             }
 
             $notifiable = app(config('unitpay.notifiable'));
@@ -36,7 +33,6 @@ class UnitPayNotifier
             if ($this->shouldSendNotification($notification)) {
                 $notifiable->notify($notification);
             }
-            
         });
     }
 

@@ -2,22 +2,19 @@
 
 namespace ActionM\UnitPay;
 
-use ActionM\UnitPay\Events\UnitPayEvent;
 use Illuminate\Http\Request;
+use ActionM\UnitPay\Events\UnitPayEvent;
 use Illuminate\Support\Facades\Validator;
-
 use ActionM\UnitPay\Exceptions\InvalidConfiguration;
 
 class UnitPay
 {
-
-    function __construct()
+    public function __construct()
     {
-
     }
 
     /**
-     * Allow if ip address is in whitelist
+     * Allow if ip address is in whitelist.
      * @param $ip
      * @return bool
      */
@@ -32,29 +29,31 @@ class UnitPay
     }
 
     /**
-     * Return json error result
+     * Return json error result.
      * @param $message
      * @return mixed
      */
     public function ResponseError($message)
     {
         $result['error']['message'] = $message;
+
         return $result;
     }
 
     /**
-     * Return json success result
+     * Return json success result.
      * @param $message
      * @return mixed
      */
     public function ResponseOK($message)
     {
         $result['result']['message'] = $message;
+
         return $result;
     }
 
     /**
-     * Fill event details to pass title and request params as array
+     * Fill event details to pass title and request params as array.
      * @param $event_type
      * @param $event_title
      * @param Request $request
@@ -62,9 +61,9 @@ class UnitPay
     public function eventFillAndSend($event_type, $event_title, Request $request)
     {
         $event_details = [
-            'title' => "UnitPay: " . $event_title,
+            'title' => 'UnitPay: '.$event_title,
             'ip' => $request->ip(),
-            'request' => $request->all()
+            'request' => $request->all(),
         ];
 
         event(
@@ -73,7 +72,7 @@ class UnitPay
     }
 
     /**
-     * Return hash for order form params
+     * Return hash for order form params.
      * @param $account
      * @param $currency
      * @param $desc
@@ -83,12 +82,13 @@ class UnitPay
      */
     public function getFormSignature($account, $currency, $desc, $sum, $secretKey)
     {
-        $hashStr = $account . '{up}' . $currency . '{up}' . $desc . '{up}' . $sum . '{up}' . $secretKey;
+        $hashStr = $account.'{up}'.$currency.'{up}'.$desc.'{up}'.$sum.'{up}'.$secretKey;
+
         return hash('sha256', $hashStr);
     }
 
     /**
-     * Return hash for params from UnitPay gate
+     * Return hash for params from UnitPay gate.
      * @param $method
      * @param array $params
      * @param $secretKey
@@ -100,11 +100,12 @@ class UnitPay
         unset($params['sign'], $params['signature']);
         array_push($params, $secretKey);
         array_unshift($params, $method);
-        return hash('sha256', join('{up}', $params));
+
+        return hash('sha256', implode('{up}', $params));
     }
 
     /**
-     * Generate UnitPay order array with required array for order form
+     * Generate UnitPay order array with required array for order form.
      * @param $payment_amount
      * @param $payment_no
      * @param $user_email
@@ -119,15 +120,16 @@ class UnitPay
             'PAYMENT_NO' => $payment_no,
             'USER_EMAIL' => $user_email,
             'ITEM_NAME' => $item_name,
-            'CURRENCY' => $currency
+            'CURRENCY' => $currency,
         ];
 
         $this->requiredOrderParamsCheck($order);
+
         return $order;
     }
 
     /**
-     * Check required order params for order form and raise an exception if fails
+     * Check required order params for order form and raise an exception if fails.
      * @param $order
      * @throws InvalidConfiguration
      */
@@ -138,11 +140,11 @@ class UnitPay
             'PAYMENT_NO',
             'USER_EMAIL',
             'ITEM_NAME',
-            'CURRENCY'
+            'CURRENCY',
         ];
 
         foreach ($required_fields as $key => $value) {
-            if (!array_key_exists($value, $order) || empty($order[$value])) {
+            if (! array_key_exists($value, $order) || empty($order[$value])) {
                 throw InvalidConfiguration::generatePaymentFormOrderParamsNotSet($value);
             }
         }
@@ -152,17 +154,17 @@ class UnitPay
             'UAH',
             'BYR',
             'EUR',
-            'USD'
+            'USD',
         ];
 
-        if (!in_array($order['CURRENCY'], $currency_arr)) {
+        if (! in_array($order['CURRENCY'], $currency_arr)) {
             throw InvalidConfiguration::generatePaymentFormOrderInvalidCurrency($order['CURRENCY']);
         }
     }
 
     /**
      * Generate html forms from view with payment buttons
-     * Note: you can customise the view via artisan:publish
+     * Note: you can customise the view via artisan:publish.
      * @param $order
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
@@ -192,7 +194,7 @@ class UnitPay
     }
 
     /**
-     * Validate request params from UnitPay gate
+     * Validate request params from UnitPay gate.
      * @param Request $request
      * @return bool
      */
@@ -217,7 +219,7 @@ class UnitPay
     }
 
     /**
-     * Validate request signature from UnitPay gate
+     * Validate request signature from UnitPay gate.
      * @param Request $request
      * @return bool
      */
@@ -233,14 +235,15 @@ class UnitPay
     }
 
     /**
-     * Validate ip, request params and signature from UnitPay gate
+     * Validate ip, request params and signature from UnitPay gate.
      * @param Request $request
      * @return bool
      */
     public function validateOrderRequestFromGate(Request $request)
     {
-        if (!$this->AllowIP($request->ip()) || !$this->validate($request) || !$this->validateSignature($request)) {
+        if (! $this->AllowIP($request->ip()) || ! $this->validate($request) || ! $this->validateSignature($request)) {
             $this->eventFillAndSend('unitpay.error', 'validateOrderRequestFromGate', $request);
+
             return false;
         }
 
@@ -248,7 +251,7 @@ class UnitPay
     }
 
     /**
-     * Call SearchOrderFilter and check return order params
+     * Call SearchOrderFilter and check return order params.
      * @param Request $request
      * @return bool
      * @throws InvalidConfiguration
@@ -257,7 +260,7 @@ class UnitPay
     {
         $callable = config('unitpay.SearchOrderFilter');
 
-        if (!is_callable($callable)) {
+        if (! is_callable($callable)) {
             throw InvalidConfiguration::searchOrderFilterInvalid();
         }
 
@@ -273,23 +276,27 @@ class UnitPay
 
         $order = $callable($request, $request->input('params.account'));
 
-        if (!$order) {
+        if (! $order) {
             $this->eventFillAndSend('unitpay.error', 'orderNotFound', $request);
+
             return false;
         }
 
-        if (!array_key_exists('orderStatus', $order)) {
+        if (! array_key_exists('orderStatus', $order)) {
             $this->eventFillAndSend('unitpay.error', 'orderStatusInvalid', $request);
+
             return false;
         }
 
-        if (!array_key_exists('orderSum', $order) && $request->input('params.orderSum') != $order['orderSum']) {
+        if (! array_key_exists('orderSum', $order) && $request->input('params.orderSum') != $order['orderSum']) {
             $this->eventFillAndSend('unitpay.error', 'orderSumInvalid', $request);
+
             return false;
         }
 
-        if (!array_key_exists('orderCurrency', $order) && $request->input('params.orderCurrency') != $order['orderCurrency']) {
+        if (! array_key_exists('orderCurrency', $order) && $request->input('params.orderCurrency') != $order['orderCurrency']) {
             $this->eventFillAndSend('unitpay.error', 'orderCurrencyInvalid', $request);
+
             return false;
         }
 
@@ -297,7 +304,7 @@ class UnitPay
     }
 
     /**
-     * Call PaidOrderFilter if order not paid
+     * Call PaidOrderFilter if order not paid.
      * @param Request $request
      * @param $order
      * @return mixed
@@ -307,7 +314,7 @@ class UnitPay
     {
         $callable = config('unitpay.PaidOrderFilter');
 
-        if (!is_callable($callable)) {
+        if (! is_callable($callable)) {
             throw InvalidConfiguration::orderPaidFilterInvalid();
         }
 
@@ -316,27 +323,28 @@ class UnitPay
     }
 
     /**
-     * Run UnitPay::payOrderFromGate($request) when receive request from UnitPay gate
+     * Run UnitPay::payOrderFromGate($request) when receive request from UnitPay gate.
      * @param Request $request
      * @return bool
      */
     public function payOrderFromGate(Request $request)
     {
         // Validate request params from UnitPay server.
-        if (!$this->validateOrderRequestFromGate($request)) {
+        if (! $this->validateOrderRequestFromGate($request)) {
             return $this->ResponseError('validateOrderRequestFromGate');
         }
 
         // Search and return order
         $order = $this->SearchOrderFilterCall($request);
 
-        if (!$order) {
+        if (! $order) {
             return $this->ResponseError('searchOrderFilter');
         }
 
         // Return success response for check and error methods
         if (in_array($request->get('method'), ['check', 'error'])) {
-            $this->eventFillAndSend('unitpay.info', 'payOrderFromGate method = ' . $request->get('method'), $request);
+            $this->eventFillAndSend('unitpay.info', 'payOrderFromGate method = '.$request->get('method'), $request);
+
             return $this->ResponseOK('OK');
         }
 
@@ -349,6 +357,7 @@ class UnitPay
         // return success response and notify info
         if (mb_strtolower($order['orderStatus']) === 'paid') {
             $this->eventFillAndSend('unitpay.info', 'order already paid', $request);
+
             return $this->ResponseOK('OK');
         }
 
@@ -358,13 +367,13 @@ class UnitPay
 
         // PaidOrderFilter - update order into DB as paid & other actions
         // if return false then error
-        if (!$this->PaidOrderFilterCall($request, $order)) {
+        if (! $this->PaidOrderFilterCall($request, $order)) {
             $this->eventFillAndSend('unitpay.error', 'PaidOrderFilterCall', $request);
+
             return $this->ResponseError('PaidOrderFilterCall');
         }
 
         // Order is paid in UnitPay and updated in database
         return $this->ResponseOK('OK');
     }
-
 }

@@ -2,16 +2,14 @@
 
 namespace ActionM\UnitPay\Test;
 
-use ActionM\UnitPay\Events\UnitPayEvent;
+use Illuminate\Http\Request;
 use ActionM\UnitPay\Notifiable;
 use ActionM\UnitPay\Notification;
-
+use ActionM\UnitPay\Test\Dummy\Order;
+use ActionM\UnitPay\Events\UnitPayEvent;
 use ActionM\UnitPay\Test\Dummy\AnotherNotifiable;
 use ActionM\UnitPay\Test\Dummy\AnotherNotification;
-use ActionM\UnitPay\Test\Dummy\Order;
-
 use Illuminate\Support\Facades\Notification as NotificationFacade;
-use Illuminate\Http\Request;
 
 class UnitPayTest extends TestCase
 {
@@ -22,7 +20,7 @@ class UnitPayTest extends TestCase
     }
 
     /**
-     * Send event with event_type
+     * Send event with event_type.
      * @param $event_type
      * @return array|null
      */
@@ -36,7 +34,7 @@ class UnitPayTest extends TestCase
     }
 
     /**
-     * Create test request with custom method and add signature
+     * Create test request with custom method and add signature.
      * @param string $method
      * @param bool $signature
      * @return Request
@@ -51,8 +49,8 @@ class UnitPayTest extends TestCase
                 'payerSum' => '1',
                 'payerCurrency' => '1',
                 'orderSum' => '1',
-                'unitpayId' => '1'
-            ]
+                'unitpayId' => '1',
+            ],
         ];
 
         if ($signature === false) {
@@ -62,6 +60,7 @@ class UnitPayTest extends TestCase
         }
 
         $request = new Request($params);
+
         return $request;
     }
 
@@ -75,7 +74,8 @@ class UnitPayTest extends TestCase
     public function returnsTrueWhenTypeIsNotEmpty($notification)
     {
         $type = $notification->getEvent()->type;
-        return !empty($type);
+
+        return ! empty($type);
     }
 
     /** @test */
@@ -241,7 +241,6 @@ class UnitPayTest extends TestCase
     /** @test */
     public function search_order_has_callbacks_paid_not_notify()
     {
-
         $this->app['config']->set('unitpay.PaidOrderFilter', [Order::class, 'PaidOrderFilter']);
         $this->app['config']->set('unitpay.SearchOrderFilter', [Order::class, 'SearchOrderFilterPaid']);
         $request = $this->create_test_request('check', 'ec61edc55b99b7b62d8157dffd88895d72250e02163b1a60cd5f52d48d8a7015');
@@ -297,7 +296,5 @@ class UnitPayTest extends TestCase
         $this->assertArrayHasKey('result', $this->unitpay->payOrderFromGate($request));
 
         NotificationFacade::assertSentTo(new Notifiable(), Notification::class);
-
-
     }
 }

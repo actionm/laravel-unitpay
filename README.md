@@ -63,7 +63,7 @@ Once you have published the configuration files, please edit the config file in 
 - Create an account on [unitpay.ru](http://unitpay.ru)
 - Add your project, copy the `PUBLIC KEY` and `SECRET KEY` params and paste into `config/unitpay.php`
 - After the configuration has been published, edit `config/unitpay.php`
-- Set the callback static function for `SearchOrderFilter` and `PaidOrderFilter`
+- Set the callback static function for `searchOrderFilter` and `paidOrderFilter`
 - Set notification channels (email and/or Slack) and Slack `webhook_url` 
  
 ## Usage
@@ -100,11 +100,11 @@ You must define callbacks in `config/unitpay.php` to search the order and save t
 
 
 ``` php
- 'SearchOrderFilter' => null  // ExampleController:SearchOrderFilter($request)
+ 'searchOrderFilter' => null  // ExampleController:searchOrderFilter($request)
 ```
 
 ``` php
- 'PaidOrderFilter' => null  // ExampleController::PaidOrderFilter($request,$order)
+ 'paidOrderFilter' => null  // ExampleController::paidOrderFilter($request,$order)
 ```
 
 ## Example
@@ -113,8 +113,8 @@ The process scheme:
 
 1. The request comes from `unitpay.ru` `GET` `http://yourproject.com/unitpay/result` (with params).
 2. The function`ExampleController@payOrderFromGate` runs the validation process (auto-validation request params).
-3. The static function `SearchOrderFilter` will be called (see `config/unitpay.php` `SearchOrderFilter`) to search the order by the unique id.
-4. If the current order status is NOT `paid` in your database, the static function `PaidOrderFilter` will be called (see `config/unitpay.php` `PaidOrderFilter`).
+3. The static function `searchOrderFilter` will be called (see `config/unitpay.php` `searchOrderFilter`) to search the order by the unique id.
+4. If the current order status is NOT `paid` in your database, the static function `paidOrderFilter` will be called (see `config/unitpay.php` `paidOrderFilter`).
 
 Add the route to `routes/web.php`:
 ``` php
@@ -138,7 +138,7 @@ class ExampleController extends Controller
      * @param $order_id
      * @return mixed
      */
-    public static function SearchOrderFilter(Request $request, $order_id) {
+    public static function searchOrderFilter(Request $request, $order_id) {
 
         // If the order with the unique order ID exists in the database
         $order = Order::where('unique_id', $order_id)->first();
@@ -163,10 +163,10 @@ class ExampleController extends Controller
      * @param $order
      * @return bool
      */
-    public static function PaidOrderFilter(Request $request, $order)
+    public static function paidOrderFilter(Request $request, $order)
     {
         // Your code should be here:
-        YourOrderController::SaveOrderAsPaid($order);
+        YourOrderController::saveOrderAsPaid($order);
 
         // Return TRUE if the order is saved as "paid" in the database or FALSE if some error occurs.
         // If you return FALSE, then you can repeat the failed paid requests on the unitpay website manually.
@@ -175,9 +175,9 @@ class ExampleController extends Controller
 
     /**
      * Process the request from the UnitPay route.
-     * SearchOrderFilter is called to search the order.
-     * If the order is paid for the first time, PaidOrderFilter is called to set the order status.
-     * If SearchOrderFilter returns the "paid" order status, then PaidOrderFilter will not be called.
+     * searchOrderFilter is called to search the order.
+     * If the order is paid for the first time, paidOrderFilter is called to set the order status.
+     * If searchOrderFilter returns the "paid" order status, then paidOrderFilter will not be called.
      *
      * @param Request $request
      * @return mixed

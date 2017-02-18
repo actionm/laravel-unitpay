@@ -33,7 +33,7 @@ class UnitPay
      * @param $message
      * @return mixed
      */
-    public function ResponseError($message)
+    public function responseError($message)
     {
         $result['error']['message'] = $message;
 
@@ -45,7 +45,7 @@ class UnitPay
      * @param $message
      * @return mixed
      */
-    public function ResponseOK($message)
+    public function responseOK($message)
     {
         $result['result']['message'] = $message;
 
@@ -256,7 +256,7 @@ class UnitPay
      * @return bool
      * @throws InvalidConfiguration
      */
-    public function SearchOrderFilterCall(Request $request)
+    public function callFilterSearchOrder(Request $request)
     {
         $callable = config('unitpay.SearchOrderFilter');
 
@@ -310,7 +310,7 @@ class UnitPay
      * @return mixed
      * @throws InvalidConfiguration
      */
-    public function PaidOrderFilterCall(Request $request, $order)
+    public function callFilterPaidOrder(Request $request, $order)
     {
         $callable = config('unitpay.PaidOrderFilter');
 
@@ -331,26 +331,26 @@ class UnitPay
     {
         // Validate request params from UnitPay server.
         if (! $this->validateOrderRequestFromGate($request)) {
-            return $this->ResponseError('validateOrderRequestFromGate');
+            return $this->responseError('validateOrderRequestFromGate');
         }
 
         // Search and return order
-        $order = $this->SearchOrderFilterCall($request);
+        $order = $this->callFilterSearchOrder($request);
 
         if (! $order) {
-            return $this->ResponseError('searchOrderFilter');
+            return $this->responseError('searchOrderFilter');
         }
 
         // Return success response for check and error methods
         if (in_array($request->get('method'), ['check', 'error'])) {
             $this->eventFillAndSend('unitpay.info', 'payOrderFromGate method = '.$request->get('method'), $request);
 
-            return $this->ResponseOK('OK');
+            return $this->responseOK('OK');
         }
 
         // If method unknown then return error
         if ($request->get('method') != 'pay') {
-            return $this->ResponseError('Invalid request');
+            return $this->responseError('Invalid request');
         }
 
         // If method pay and current order status is paid
@@ -358,7 +358,7 @@ class UnitPay
         if (mb_strtolower($order['orderStatus']) === 'paid') {
             $this->eventFillAndSend('unitpay.info', 'order already paid', $request);
 
-            return $this->ResponseOK('OK');
+            return $this->responseOK('OK');
         }
 
         // Current order is paid in UnitPay and not paid in database
@@ -367,13 +367,13 @@ class UnitPay
 
         // PaidOrderFilter - update order into DB as paid & other actions
         // if return false then error
-        if (! $this->PaidOrderFilterCall($request, $order)) {
-            $this->eventFillAndSend('unitpay.error', 'PaidOrderFilterCall', $request);
+        if (! $this->callFilterPaidOrder($request, $order)) {
+            $this->eventFillAndSend('unitpay.error', 'callFilterPaidOrder', $request);
 
-            return $this->ResponseError('PaidOrderFilterCall');
+            return $this->responseError('callFilterPaidOrder');
         }
 
         // Order is paid in UnitPay and updated in database
-        return $this->ResponseOK('OK');
+        return $this->responseOK('OK');
     }
 }

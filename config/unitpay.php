@@ -31,14 +31,14 @@ return [
      *  orderCurrency
      *  orderSum
      */
-    'SearchOrderFilter' => null, //  'App\Http\Controllers\ExampleController::SearchOrderFilter',
+    'searchOrderFilter' => null, //  'App\Http\Controllers\ExampleController::searchOrderFilter',
 
     /*
      *  PaidOrderFilter
      *  If current orderStatus from DB != paid then call PaidOrderFilter
      *  update order into DB & other actions
      */
-    'PaidOrderFilter' => null, //  'App\Http\Controllers\ExampleController::PaidOrderFilter',
+    'paidOrderFilter' => null, //  'App\Http\Controllers\ExampleController::paidOrderFilter',
 
     'payment_forms' => [
         'cards' => true,

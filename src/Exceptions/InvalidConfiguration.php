@@ -15,12 +15,12 @@ class InvalidConfiguration extends Exception
 
     public static function searchOrderFilterInvalid()
     {
-        return new self('UnitPay config: SearchOrderFilter callback not set');
+        return new self('UnitPay config: searchOrderFilter callback not set');
     }
 
     public static function orderPaidFilterInvalid()
     {
-        return new self('UnitPay config: PaidOrderFilter callback not set');
+        return new self('UnitPay config: paidOrderFilter callback not set');
     }
 
     public static function generatePaymentFormOrderParamsNotSet($field)

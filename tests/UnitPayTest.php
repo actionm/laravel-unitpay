@@ -222,11 +222,11 @@ class UnitPayTest extends TestCase
     {
         $request = $this->create_test_request('check', 'ec61edc55b99b7b62d8157dffd88895d72250e02163b1a60cd5f52d48d8a7015');
         $this->expectException('ActionM\UnitPay\Exceptions\InvalidConfiguration');
-        $this->unitpay->SearchOrderFilterCall($request);
+        $this->unitpay->callFilterSearchOrder($request);
 
         $request = $this->create_test_request('check', 'ec61edc55b99b7b62d8157dffd88895d72250e02163b1a60cd5f52d48d8a7015');
         $this->expectException('ActionM\UnitPay\Exceptions\InvalidConfiguration');
-        $this->unitpay->PaidOrderFilterCall($request, ['order_id' => '12345']);
+        $this->unitpay->callFilterPaidOrder($request, ['order_id' => '12345']);
     }
 
     /** @test */
@@ -234,7 +234,7 @@ class UnitPayTest extends TestCase
     {
         $this->app['config']->set('unitpay.SearchOrderFilter', [Order::class, 'SearchOrderFilterFails']);
         $request = $this->create_test_request('check', 'ec61edc55b99b7b62d8157dffd88895d72250e02163b1a60cd5f52d48d8a7015');
-        $this->assertFalse($this->unitpay->SearchOrderFilterCall($request));
+        $this->assertFalse($this->unitpay->callFilterSearchOrder($request));
         NotificationFacade::assertSentTo(new Notifiable(), Notification::class);
     }
 
@@ -244,7 +244,7 @@ class UnitPayTest extends TestCase
         $this->app['config']->set('unitpay.PaidOrderFilter', [Order::class, 'PaidOrderFilter']);
         $this->app['config']->set('unitpay.SearchOrderFilter', [Order::class, 'SearchOrderFilterPaid']);
         $request = $this->create_test_request('check', 'ec61edc55b99b7b62d8157dffd88895d72250e02163b1a60cd5f52d48d8a7015');
-        $this->assertNotFalse($this->unitpay->SearchOrderFilterCall($request));
+        $this->assertNotFalse($this->unitpay->callFilterSearchOrder($request));
         NotificationFacade::assertNotSentTo(new Notifiable(), Notification::class);
     }
 
@@ -254,7 +254,7 @@ class UnitPayTest extends TestCase
         $this->app['config']->set('unitpay.SearchOrderFilter', [Order::class, 'SearchOrderFilterPaid']);
         $this->app['config']->set('unitpay.PaidOrderFilter', [Order::class, 'PaidOrderFilter']);
         $request = $this->create_test_request('check', 'ec61edc55b99b7b62d8157dffd88895d72250e02163b1a60cd5f52d48d8a7015');
-        $this->assertTrue($this->unitpay->PaidOrderFilterCall($request, ['order_id' => '12345']));
+        $this->assertTrue($this->unitpay->callFilterPaidOrder($request, ['order_id' => '12345']));
     }
 
     /** @test */
@@ -262,7 +262,7 @@ class UnitPayTest extends TestCase
     {
         $this->app['config']->set('unitpay.PaidOrderFilter', [Order::class, 'PaidOrderFilterFails']);
         $request = $this->create_test_request('check', 'ec61edc55b99b7b62d8157dffd88895d72250e02163b1a60cd5f52d48d8a7015');
-        $this->assertFalse($this->unitpay->PaidOrderFilterCall($request, ['order_id' => '12345']));
+        $this->assertFalse($this->unitpay->callFilterPaidOrder($request, ['order_id' => '12345']));
     }
 
     /** @test */

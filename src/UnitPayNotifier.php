@@ -36,7 +36,7 @@ class UnitPayNotifier
         });
     }
 
-    public function isValidNotificationClass($notification): bool
+    public function isValidNotificationClass($notification)
     {
         if (get_class($notification) === Notification::class) {
             return true;

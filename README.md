@@ -2,7 +2,7 @@
 
 [![Latest Stable Version](https://poser.pugx.org/actionm/laravel-unitpay/v/stable)](https://packagist.org/packages/actionm/laravel-unitpay)
 [![Build Status](https://img.shields.io/travis/actionm/laravel-unitpay/master.svg?style=flat-square)](https://travis-ci.org/actionm/laravel-unitpay)
-[![SensioLabsInsight](https://img.shields.io/sensiolabs/i/xxxxxxxxx.svg?style=flat-square)](https://insight.sensiolabs.com/projects/xxxxxxxxx)
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/91033cd8-7b31-4001-8a18-331336c7dcd3/mini.png)](https://insight.sensiolabs.com/projects/91033cd8-7b31-4001-8a18-331336c7dcd3)
 [![Quality Score](https://img.shields.io/scrutinizer/g/actionm/laravel-unitpay.svg?style=flat-square)](https://scrutinizer-ci.com/g/actionm/laravel-unitpay)
 [![Total Downloads](https://img.shields.io/packagist/dt/actionm/laravel-unitpay.svg?style=flat-square)](https://packagist.org/packages/actionm/laravel-unitpay)
 [![License](https://poser.pugx.org/actionm/laravel-unitpay/license)](https://packagist.org/packages/actionm/laravel-unitpay)

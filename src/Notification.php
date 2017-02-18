@@ -13,24 +13,24 @@ class Notification extends IlluminateNotification
     /** @var \ActionM\UnitPay\Events\UnitPayEvent * */
     protected $event;
 
-    public function via($notifiable): array
+    public function via($notifiable)
     {
         return config('unitpay.channels');
     }
 
-    public function setEvent(UnitPayEvent $event): self
+    public function setEvent(UnitPayEvent $event)
     {
         $this->event = $event;
 
         return $this;
     }
 
-    public function getEvent(): UnitPayEvent
+    public function getEvent()
     {
         return $this->event;
     }
 
-    public function toMail($notifiable): MailMessage
+    public function toMail($notifiable)
     {
         return (new MailMessage)
             ->error()
@@ -40,7 +40,7 @@ class Notification extends IlluminateNotification
             ->line("Request details: {$this->event->details}");
     }
 
-    public function toSlack(): SlackMessage
+    public function toSlack()
     {
         $slack_message = new SlackMessage();
         $slack_message->level = $this->event->type;

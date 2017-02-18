@@ -2,9 +2,9 @@
 
 namespace ActionM\UnitPay;
 
-use ActionM\UnitPay\Exceptions\InvalidConfiguration;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\ServiceProvider;
+use ActionM\UnitPay\Exceptions\InvalidConfiguration;
 
 class UnitPayServiceProvider extends ServiceProvider
 {
@@ -24,7 +24,6 @@ class UnitPayServiceProvider extends ServiceProvider
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'unitpay');
 
         $this->testing_env();
-
     }
 
     /**
@@ -43,25 +42,24 @@ class UnitPayServiceProvider extends ServiceProvider
         $this->app->alias('unitpay', 'UnitPay');
 
         $this->app->singleton(UnitPayNotifier::class);
-
     }
 
     /**
-     * Not check config if testing env
+     * Not check config if testing env.
      * @throws InvalidConfiguration
      */
     public function testing_env()
     {
-        if (!App::environment('testing')) {
+        if (! App::environment('testing')) {
             $callable = config('unitpay.SearchOrderFilter');
 
-            if (!is_callable($callable)) {
+            if (! is_callable($callable)) {
                 throw InvalidConfiguration::searchOrderFilterInvalid();
             }
 
             $callable = config('unitpay.PaidOrderFilter');
 
-            if (!is_callable($callable)) {
+            if (! is_callable($callable)) {
                 throw InvalidConfiguration::orderPaidFilterInvalid();
             }
         }

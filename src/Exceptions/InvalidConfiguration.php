@@ -15,20 +15,21 @@ class InvalidConfiguration extends Exception
 
     public static function searchOrderFilterInvalid(): self
     {
-        return new self("UnitPay config: SearchOrderFilter callback not set");
+        return new self('UnitPay config: SearchOrderFilter callback not set');
     }
 
     public static function orderPaidFilterInvalid(): self
     {
-        return new self("UnitPay config: PaidOrderFilter callback not set");
+        return new self('UnitPay config: PaidOrderFilter callback not set');
     }
 
     public static function generatePaymentFormOrderParamsNotSet($field): self
     {
-        return new self("UnitPay config: generatePaymentForm required order params not set ( field: `".$field."`)");
+        return new self('UnitPay config: generatePaymentForm required order params not set ( field: `'.$field.'`)');
     }
+
     public static function generatePaymentFormOrderInvalidCurrency($currency): self
     {
-        return new self("UnitPay config: generatePaymentForm required order params not set ( field: `".$currency."`)");
+        return new self('UnitPay config: generatePaymentForm required order params not set ( field: `'.$currency.'`)');
     }
 }

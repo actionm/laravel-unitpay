@@ -5,12 +5,12 @@ return [
     /*
      * unitpay.ru PUBLIC KEY for project
      */
-    'UNITPAY_PUBLIC_KEY' => env('UNITPAY_PUBLIC_KEY',''),
+    'UNITPAY_PUBLIC_KEY' => env('UNITPAY_PUBLIC_KEY', ''),
 
     /*
      * unitpay.ru SECRET KEY for project
      */
-    'UNITPAY_SECRET_KEY' => env('UNITPAY_SECRET_KEY',''),
+    'UNITPAY_SECRET_KEY' => env('UNITPAY_SECRET_KEY', ''),
 
     /*
      * locale for payment form

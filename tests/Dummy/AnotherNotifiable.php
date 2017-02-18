@@ -1,4 +1,5 @@
 <?php
+
 namespace ActionM\UnitPay\Test\Dummy;
 
 use Illuminate\Notifications\Notifiable as NotifiableTrait;

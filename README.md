@@ -1,10 +1,11 @@
 # Laravel payment processor package for UnitPay gateway
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/actionm/laravel-unitpay.svg?style=flat-square)](https://packagist.org/packages/actionm/laravel-unitpay)
+[![Latest Stable Version](https://poser.pugx.org/actionm/laravel-unitpay/v/stable)](https://packagist.org/packages/actionm/laravel-unitpay)
 [![Build Status](https://img.shields.io/travis/actionm/laravel-unitpay/master.svg?style=flat-square)](https://travis-ci.org/actionm/laravel-unitpay)
 [![SensioLabsInsight](https://img.shields.io/sensiolabs/i/xxxxxxxxx.svg?style=flat-square)](https://insight.sensiolabs.com/projects/xxxxxxxxx)
 [![Quality Score](https://img.shields.io/scrutinizer/g/actionm/laravel-unitpay.svg?style=flat-square)](https://scrutinizer-ci.com/g/actionm/laravel-unitpay)
 [![Total Downloads](https://img.shields.io/packagist/dt/actionm/laravel-unitpay.svg?style=flat-square)](https://packagist.org/packages/actionm/laravel-unitpay)
+[![License](https://poser.pugx.org/actionm/laravel-unitpay/license)](https://packagist.org/packages/actionm/laravel-unitpay)
 
 Accept payments via UnitPay ([unitpay.ru](http://unitpay.ru)) using this Laravel framework package ([Laravel](https://laravel.com)).
 

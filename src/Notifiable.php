@@ -8,12 +8,12 @@ class Notifiable
 {
     use NotifiableTrait;
 
-    public function routeNotificationForMail(): string
+    public function routeNotificationForMail()
     {
         return config('unitpay.mail.to');
     }
 
-    public function routeNotificationForSlack(): string
+    public function routeNotificationForSlack()
     {
         return config('unitpay.slack.webhook_url');
     }

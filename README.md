@@ -14,7 +14,7 @@ Accept payments via UnitPay ([unitpay.ru](http://unitpay.ru)) using this Laravel
 
 You can accept payments with Unitpay via Yandex.Money, QIWI, WebMoney, PayPal, credit cards etc.
 
-#### Laravel 5.3, 5.4, PHP >=5.6.4
+#### Laravel 5.3, 5.4, PHP >= 5.6.4
 
 ## Installation
 

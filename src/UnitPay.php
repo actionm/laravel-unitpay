@@ -258,7 +258,7 @@ class UnitPay
      */
     public function callFilterSearchOrder(Request $request)
     {
-        $callable = config('unitpay.SearchOrderFilter');
+        $callable = config('unitpay.searchOrderFilter');
 
         if (! is_callable($callable)) {
             throw InvalidConfiguration::searchOrderFilterInvalid();
@@ -312,7 +312,7 @@ class UnitPay
      */
     public function callFilterPaidOrder(Request $request, $order)
     {
-        $callable = config('unitpay.PaidOrderFilter');
+        $callable = config('unitpay.paidOrderFilter');
 
         if (! is_callable($callable)) {
             throw InvalidConfiguration::orderPaidFilterInvalid();

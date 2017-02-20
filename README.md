@@ -148,7 +148,8 @@ class ExampleController extends Controller
             $order['orderSum'] = $current_order->amount; // from your database
             $order['orderCurrency'] = 'RUB';  // from your database
 
-            // if the current_order is already paid in your database, return strict "paid"; if not, return something else
+            // if the current_order is already paid in your database, return strict "paid"; 
+            // if not, return something else
             $order['orderStatus'] = $current_order->order_status; // from your database
             return $order;
         }

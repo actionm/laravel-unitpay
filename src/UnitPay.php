@@ -15,7 +15,7 @@ class UnitPay
 
     /**
      * Allow if ip address is in whitelist.
-     * @param $ip
+     * @param string $ip
      * @return bool
      */
     public function allowIP($ip)
@@ -30,7 +30,7 @@ class UnitPay
 
     /**
      * Return json error result.
-     * @param $message
+     * @param string $message
      * @return mixed
      */
     public function responseError($message)
@@ -42,7 +42,7 @@ class UnitPay
 
     /**
      * Return json success result.
-     * @param $message
+     * @param string $message
      * @return mixed
      */
     public function responseOK($message)
@@ -54,8 +54,8 @@ class UnitPay
 
     /**
      * Fill event details to pass title and request params as array.
-     * @param $event_type
-     * @param $event_title
+     * @param string $event_type
+     * @param string $event_title
      * @param Request $request
      */
     public function eventFillAndSend($event_type, $event_title, Request $request)
@@ -306,7 +306,7 @@ class UnitPay
     /**
      * Call PaidOrderFilter if order not paid.
      * @param Request $request
-     * @param $order
+     * @param bool $order
      * @return mixed
      * @throws InvalidConfiguration
      */

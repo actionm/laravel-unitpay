@@ -15,7 +15,7 @@ return [
     /*
      * locale for payment form
      */
-    'locale' => 'ru',  // ru || en
+    'locale' => 'ru', // ru || en
 
     /*
      * Hide other payment methods
@@ -81,7 +81,7 @@ return [
     'channels' => ['mail', 'slack'],
 
     'mail' => [
-        'to' => '',  // your email
+        'to' => '', // your email
     ],
 
     'slack' => [

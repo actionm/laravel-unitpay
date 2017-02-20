@@ -47,7 +47,7 @@ class Notification extends IlluminateNotification
 
         return $slack_message
             ->content('UnitPay payment message from '.config('app.url'))
-            ->attachment(function(SlackAttachment $attachment) {
+            ->attachment(function (SlackAttachment $attachment) {
                 $attachment->fields([
                     'Title' => $this->event->title,
                     'IP' => $this->event->ip,

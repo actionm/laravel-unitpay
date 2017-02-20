@@ -14,10 +14,10 @@ class UnitPayNotifier
     public function subscribe(Dispatcher $events)
     {
         // Listen events and send notification
-        $events->listen(UnitPayEvent::class, function ($event) {
+        $events->listen(UnitPayEvent::class, function($event) {
             $event->type = str_replace('unitpay.', '', $event->type);
 
-            if (! in_array($event->type, ['info', 'success', 'error'])) {
+            if (!in_array($event->type, ['info', 'success', 'error'])) {
                 $event->type = 'error';
             }
 
@@ -26,7 +26,7 @@ class UnitPayNotifier
             $notification = app(config('unitpay.notification'));
             $notification->setEvent($event);
 
-            if (! $this->isValidNotificationClass($notification)) {
+            if (!$this->isValidNotificationClass($notification)) {
                 throw InvalidConfiguration::notificationClassInvalid(get_class($notification));
             }
 
@@ -53,7 +53,7 @@ class UnitPayNotifier
     {
         $callable = config('unitpay.notificationFilter');
 
-        if (! is_callable($callable)) {
+        if (!is_callable($callable)) {
             return true;
         }
 

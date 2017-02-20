@@ -35,7 +35,7 @@ class UnitPayServiceProvider extends ServiceProvider
 
         $this->app['events']->subscribe(UnitPayNotifier::class);
 
-        $this->app->singleton('unitpay', function () {
+        $this->app->singleton('unitpay', function() {
             return $this->app->make('ActionM\UnitPay\UnitPay');
         });
 
@@ -50,16 +50,16 @@ class UnitPayServiceProvider extends ServiceProvider
      */
     public function testingEnv()
     {
-        if (! App::environment('testing')) {
+        if (!App::environment('testing')) {
             $callable = config('unitpay.searchOrderFilter');
 
-            if (! is_callable($callable)) {
+            if (!is_callable($callable)) {
                 throw InvalidConfiguration::searchOrderFilterInvalid();
             }
 
             $callable = config('unitpay.paidOrderFilter');
 
-            if (! is_callable($callable)) {
+            if (!is_callable($callable)) {
                 throw InvalidConfiguration::orderPaidFilterInvalid();
             }
         }

@@ -338,7 +338,7 @@ class UnitPay
         }
 
         // unset the custom order attributes for Eloquent support
-        unset($order['orderSum'],$order['orderCurrency'],$order['orderStatus']);
+        unset($order['orderSum'], $order['orderCurrency'], $order['orderStatus']);
 
         // Run PaidOrderFilter callback
         return $callable($request, $order);

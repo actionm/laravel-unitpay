@@ -2,15 +2,13 @@
 
 namespace ActionM\UnitPay\Test;
 
-use ActionM\UnitPay\UnitPayNotifiable;
-use ActionM\UnitPay\UnitPayNotification;
-use ActionM\UnitPay\Events\UnitPayEvent;
-
+use Illuminate\Http\Request;
 use ActionM\UnitPay\Test\Dummy\Order;
+use ActionM\UnitPay\UnitPayNotifiable;
+use ActionM\UnitPay\Events\UnitPayEvent;
+use ActionM\UnitPay\UnitPayNotification;
 use ActionM\UnitPay\Test\Dummy\AnotherNotifiable;
 use ActionM\UnitPay\Test\Dummy\AnotherNotification;
-
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification as NotificationFacade;
 
 class UnitPayTest extends TestCase

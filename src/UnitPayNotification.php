@@ -2,15 +2,13 @@
 
 namespace ActionM\UnitPay;
 
-use ActionM\UnitPay\Events\UnitPayEvent;
-
 use Illuminate\Bus\Queueable;
+use ActionM\UnitPay\Events\UnitPayEvent;
+use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
-
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Messages\SlackMessage;
 use Illuminate\Notifications\Messages\SlackAttachment;
-use Illuminate\Notifications\Notification;
 
 class UnitPayNotification extends Notification implements ShouldQueue
 {

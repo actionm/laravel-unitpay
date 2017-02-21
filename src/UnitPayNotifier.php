@@ -3,8 +3,8 @@
 namespace ActionM\UnitPay;
 
 use ActionM\UnitPay\Events\UnitPayEvent;
-use ActionM\UnitPay\Exceptions\InvalidConfiguration;
 use Illuminate\Contracts\Events\Dispatcher;
+use ActionM\UnitPay\Exceptions\InvalidConfiguration;
 
 class UnitPayNotifier
 {

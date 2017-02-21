@@ -4,7 +4,7 @@ namespace ActionM\UnitPay;
 
 use Illuminate\Notifications\Notifiable as NotifiableTrait;
 
-class Notifiable
+class UnitPayNotifiable
 {
     use NotifiableTrait;
 

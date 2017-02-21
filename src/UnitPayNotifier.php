@@ -3,8 +3,8 @@
 namespace ActionM\UnitPay;
 
 use ActionM\UnitPay\Events\UnitPayEvent;
-use Illuminate\Contracts\Events\Dispatcher;
 use ActionM\UnitPay\Exceptions\InvalidConfiguration;
+use Illuminate\Contracts\Events\Dispatcher;
 
 class UnitPayNotifier
 {
@@ -38,11 +38,11 @@ class UnitPayNotifier
 
     public function isValidNotificationClass($notification)
     {
-        if (get_class($notification) === Notification::class) {
+        if (get_class($notification) === UnitPayNotification::class) {
             return true;
         }
 
-        if (is_subclass_of($notification, Notification::class)) {
+        if (is_subclass_of($notification, UnitPayNotification::class)) {
             return true;
         }
 

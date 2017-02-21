@@ -2,9 +2,10 @@
 
 namespace ActionM\UnitPay;
 
+use ActionM\UnitPay\Exceptions\InvalidConfiguration;
+
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\ServiceProvider;
-use ActionM\UnitPay\Exceptions\InvalidConfiguration;
 
 class UnitPayServiceProvider extends ServiceProvider
 {

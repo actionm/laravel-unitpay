@@ -2,13 +2,15 @@
 
 namespace ActionM\UnitPay\Test;
 
-use Illuminate\Http\Request;
-use ActionM\UnitPay\Notifiable;
-use ActionM\UnitPay\Notification;
-use ActionM\UnitPay\Test\Dummy\Order;
+use ActionM\UnitPay\UnitPayNotifiable;
+use ActionM\UnitPay\UnitPayNotification;
 use ActionM\UnitPay\Events\UnitPayEvent;
+
+use ActionM\UnitPay\Test\Dummy\Order;
 use ActionM\UnitPay\Test\Dummy\AnotherNotifiable;
 use ActionM\UnitPay\Test\Dummy\AnotherNotification;
+
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification as NotificationFacade;
 
 class UnitPayTest extends TestCase
@@ -83,14 +85,14 @@ class UnitPayTest extends TestCase
     public function it_can_send_notification_when_payment_error()
     {
         $this->fireEvent('unitpay.error');
-        NotificationFacade::assertSentTo(new Notifiable(), Notification::class);
+        NotificationFacade::assertSentTo(new UnitPayNotifiable(), UnitPayNotification::class);
     }
 
     /** @test */
     public function it_can_send_notification_when_payment_success()
     {
         $this->fireEvent('unitpay.success');
-        NotificationFacade::assertSentTo(new Notifiable(), Notification::class);
+        NotificationFacade::assertSentTo(new UnitPayNotifiable(), UnitPayNotification::class);
     }
 
     /** @test */
@@ -98,7 +100,7 @@ class UnitPayTest extends TestCase
     {
         $this->app['config']->set('unitpay.notifiable', AnotherNotifiable::class);
         $this->fireEvent('unitpay.success');
-        NotificationFacade::assertSentTo(new AnotherNotifiable(), Notification::class);
+        NotificationFacade::assertSentTo(new AnotherNotifiable(), UnitPayNotification::class);
     }
 
     /** @test */
@@ -106,7 +108,7 @@ class UnitPayTest extends TestCase
     {
         $this->app['config']->set('unitpay.notification', AnotherNotification::class);
         $this->fireEvent('unitpay.success');
-        NotificationFacade::assertSentTo(new Notifiable(), AnotherNotification::class);
+        NotificationFacade::assertSentTo(new UnitPayNotifiable(), AnotherNotification::class);
     }
 
     /** @test */
@@ -114,7 +116,7 @@ class UnitPayTest extends TestCase
     {
         $this->app['config']->set('unitpay.notificationFilter', [$this, 'returnsTrueWhenTypeIsEmpty']);
         $this->fireEvent('unitpay.success');
-        NotificationFacade::assertSentTo(new Notifiable(), Notification::class);
+        NotificationFacade::assertSentTo(new UnitPayNotifiable(), UnitPayNotification::class);
     }
 
     /** @test */
@@ -122,7 +124,7 @@ class UnitPayTest extends TestCase
     {
         $this->app['config']->set('unitpay.notificationFilter', [$this, 'returnsFalseWhenTypeIsEmpty']);
         $this->fireEvent('unitpay.success');
-        NotificationFacade::assertNotSentTo(new Notifiable(), Notification::class);
+        NotificationFacade::assertNotSentTo(new UnitPayNotifiable(), UnitPayNotification::class);
     }
 
     /** @test */
@@ -236,7 +238,7 @@ class UnitPayTest extends TestCase
         $this->app['config']->set('unitpay.searchOrderFilter', [Order::class, 'SearchOrderFilterFails']);
         $request = $this->create_test_request('check', 'ec61edc55b99b7b62d8157dffd88895d72250e02163b1a60cd5f52d48d8a7015');
         $this->assertFalse($this->unitpay->callFilterSearchOrder($request));
-        NotificationFacade::assertSentTo(new Notifiable(), Notification::class);
+        NotificationFacade::assertSentTo(new UnitPayNotifiable(), UnitPayNotification::class);
     }
 
     /** @test */
@@ -251,7 +253,7 @@ class UnitPayTest extends TestCase
         ]);
 
         $this->assertFalse($this->unitpay->validateSearchOrderRequiredAttributes($request, new Order()));
-        NotificationFacade::assertSentTo(new Notifiable(), Notification::class);
+        NotificationFacade::assertSentTo(new UnitPayNotifiable(), UnitPayNotification::class);
     }
 
     /** @test */
@@ -292,7 +294,7 @@ class UnitPayTest extends TestCase
         ]);
 
         $this->assertFalse($this->unitpay->validateSearchOrderRequiredAttributes($request, $order));
-        NotificationFacade::assertSentTo(new Notifiable(), Notification::class);
+        NotificationFacade::assertSentTo(new UnitPayNotifiable(), UnitPayNotification::class);
     }
 
     /** @test */
@@ -328,7 +330,7 @@ class UnitPayTest extends TestCase
         $request = $this->create_test_request('check');
         $request->server->set('REMOTE_ADDR', '127.0.0.1');
         $this->assertArrayHasKey('result', $this->unitpay->payOrderFromGate($request));
-        NotificationFacade::assertSentTo(new Notifiable(), Notification::class);
+        NotificationFacade::assertSentTo(new UnitPayNotifiable(), UnitPayNotification::class);
     }
 
     /** @test */
@@ -341,6 +343,6 @@ class UnitPayTest extends TestCase
         $request->server->set('REMOTE_ADDR', '127.0.0.1');
         $this->assertArrayHasKey('result', $this->unitpay->payOrderFromGate($request));
 
-        NotificationFacade::assertSentTo(new Notifiable(), Notification::class);
+        NotificationFacade::assertSentTo(new UnitPayNotifiable(), UnitPayNotification::class);
     }
 }

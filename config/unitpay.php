@@ -59,14 +59,14 @@ return [
     /*
      * The notification that will be send when payment request received.
      */
-    'notification' => \ActionM\UnitPay\Notification::class,
+    'notification' => \ActionM\UnitPay\UnitPayNotification::class,
 
     /*
      * The notifiable to which the notification will be sent. The default
      * notifiable will use the mail and slack configuration specified
      * in this config file.
      */
-    'notifiable' => \ActionM\UnitPay\Notifiable::class,
+    'notifiable' => \ActionM\UnitPay\UnitPayNotifiable::class,
 
     /*
      * By default notifications are sent always. You can pass a callable to filter

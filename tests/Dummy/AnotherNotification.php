@@ -2,8 +2,8 @@
 
 namespace ActionM\UnitPay\Test\Dummy;
 
-use ActionM\UnitPay\Notification;
+use ActionM\UnitPay\UnitPayNotification;
 
-class AnotherNotification extends Notification
+class AnotherNotification extends UnitPayNotification
 {
 }

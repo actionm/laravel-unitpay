@@ -141,16 +141,15 @@ class ExampleController extends Controller
     public static function searchOrderFilter(Request $request, $order_id) {
 
         // If the order with the unique order ID exists in the database
-        $current_order = Order::where('unique_id', $order_id)->first();
+        $order = Order::where('unique_id', $order_id)->first();
 
-        if ($current_order) {
-            $order = array();
-            $order['orderSum'] = $current_order->amount; // from your database
+        if ($order) {
+            $order['orderSum'] = $order->amount; // from your database
             $order['orderCurrency'] = 'RUB';  // from your database
 
             // if the current_order is already paid in your database, return strict "paid"; 
             // if not, return something else
-            $order['orderStatus'] = $current_order->order_status; // from your database
+            $order['orderStatus'] = $order->order_status; // from your database
             return $order;
         }
 

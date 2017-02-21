@@ -9,12 +9,13 @@ use ActionM\UnitPay\Exceptions\InvalidConfiguration;
 
 class UnitPay
 {
+
     public function __construct()
     {
     }
 
     /**
-     * Allow if ip address is in whitelist.
+     * Allow access, if the ip address is in the whitelist.
      * @param $ip
      * @return bool
      */
@@ -29,7 +30,7 @@ class UnitPay
     }
 
     /**
-     * Return json error result.
+     * Return JSON error message
      * @param $message
      * @return mixed
      */
@@ -41,7 +42,7 @@ class UnitPay
     }
 
     /**
-     * Return json success result.
+     * Return JSON success message
      * @param $message
      * @return mixed
      */
@@ -53,7 +54,7 @@ class UnitPay
     }
 
     /**
-     * Fill event details to pass title and request params as array.
+     * Fill event details to pass the title and request params as array.
      * @param $event_type
      * @param $event_title
      * @param Request $request
@@ -72,7 +73,7 @@ class UnitPay
     }
 
     /**
-     * Return hash for order form params.
+     * Return hash for the order form params.
      * @param $account
      * @param $currency
      * @param $desc
@@ -100,7 +101,6 @@ class UnitPay
         unset($params['sign'], $params['signature']);
         array_push($params, $secretKey);
         array_unshift($params, $method);
-
         return hash('sha256', implode('{up}', $params));
     }
 
@@ -208,6 +208,7 @@ class UnitPay
             'params.payerCurrency' => 'required',
             'params.signature' => 'required',
             'params.orderSum' => 'required',
+            'params.orderCurrency' => 'required',
             'params.unitpayId' => 'required',
         ]);
 
@@ -251,6 +252,44 @@ class UnitPay
     }
 
     /**
+     * Validate the required attributes of the found order
+     * @param Request $request
+     * @param $order
+     * @return bool
+     */
+    public function validateSearchOrderRequiredAttributes(Request $request, $order)
+    {
+        if (! $order) {
+            $this->eventFillAndSend('unitpay.error', 'orderNotFound', $request);
+
+            return false;
+        }
+
+        // check required found order attributes
+        $attr = ['orderStatus', 'orderSum', 'orderCurrency'];
+
+        foreach ($attr as $k => $value) {
+            if (! $order->getAttribute($value)) {
+                $this->eventFillAndSend('unitpay.error', $value.'Invalid', $request);
+
+                return false;
+            }
+        }
+
+        // compare order attributes vs request params
+        $attr = ['orderSum', 'orderCurrency'];
+        foreach ($attr as $k => $value) {
+            if ( $order->getAttribute($value) != $request->input('params.'.$value) ) {
+                $this->eventFillAndSend('unitpay.error', $value.'Invalid', $request);
+
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * Call SearchOrderFilter and check return order params.
      * @param Request $request
      * @return bool
@@ -276,27 +315,7 @@ class UnitPay
 
         $order = $callable($request, $request->input('params.account'));
 
-        if (! $order) {
-            $this->eventFillAndSend('unitpay.error', 'orderNotFound', $request);
-
-            return false;
-        }
-
-        if (! array_key_exists('orderStatus', $order)) {
-            $this->eventFillAndSend('unitpay.error', 'orderStatusInvalid', $request);
-
-            return false;
-        }
-
-        if (! array_key_exists('orderSum', $order) && $request->input('params.orderSum') != $order['orderSum']) {
-            $this->eventFillAndSend('unitpay.error', 'orderSumInvalid', $request);
-
-            return false;
-        }
-
-        if (! array_key_exists('orderCurrency', $order) && $request->input('params.orderCurrency') != $order['orderCurrency']) {
-            $this->eventFillAndSend('unitpay.error', 'orderCurrencyInvalid', $request);
-
+        if (! $this->validateSearchOrderRequiredAttributes($request, $order)) {
             return false;
         }
 
@@ -355,7 +374,7 @@ class UnitPay
 
         // If method pay and current order status is paid
         // return success response and notify info
-        if (mb_strtolower($order['orderStatus']) === 'paid') {
+        if (mb_strtolower($order->orderStatus) === 'paid') {
             $this->eventFillAndSend('unitpay.info', 'order already paid', $request);
 
             return $this->responseOK('OK');

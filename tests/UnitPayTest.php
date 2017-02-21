@@ -49,6 +49,7 @@ class UnitPayTest extends TestCase
                 'payerSum' => '1',
                 'payerCurrency' => '1',
                 'orderSum' => '1',
+                'orderCurrency' => '1',
                 'unitpayId' => '1',
             ],
         ];
@@ -172,7 +173,7 @@ class UnitPayTest extends TestCase
     /** @test */
     public function generate_order_validation_true()
     {
-        $this->arrayHasKey('CURRENCY', $this->unitpay->generateUnitPayOrderWithRequiredFields('999', '12345', 'test@example.com', 'Item name', 'RUB'));
+        $this->assertArrayHasKey('CURRENCY', $this->unitpay->generateUnitPayOrderWithRequiredFields('999', '12345', 'test@example.com', 'Item name', 'RUB'));
     }
 
     /** @test */
@@ -208,7 +209,7 @@ class UnitPayTest extends TestCase
     /** @test */
     public function validate_signature()
     {
-        $request = $this->create_test_request('check', 'ec61edc55b99b7b62d8157dffd88895d72250e02163b1a60cd5f52d48d8a7015');
+        $request = $this->create_test_request('check', '3c34ad7ce9bb9fc56e8621e0a7797f3377136f365bcac07c4222575802d02b6d');
         $this->assertTrue($this->unitpay->validate($request));
         $this->assertTrue($this->unitpay->validateSignature($request));
 
@@ -239,13 +240,59 @@ class UnitPayTest extends TestCase
     }
 
     /** @test */
-    public function search_order_has_callbacks_paid_not_notify()
+    public function validate_search_order_required_attributes_not_set()
     {
-        $this->app['config']->set('unitpay.searchOrderFilter', [Order::class, 'SearchOrderFilterPaid']);
-        $this->app['config']->set('unitpay.paidOrderFilter', [Order::class, 'PaidOrderFilter']);
-        $request = $this->create_test_request('check', 'ec61edc55b99b7b62d8157dffd88895d72250e02163b1a60cd5f52d48d8a7015');
-        $this->assertNotFalse($this->unitpay->callFilterSearchOrder($request));
-        NotificationFacade::assertNotSentTo(new Notifiable(), Notification::class);
+        $request = new Request([
+            'params' => [
+                'orderStatus' => 'paid',
+                'orderSum' => '0',
+                'orderCurrency' => 'USD',
+            ],
+        ]);
+
+        $this->assertFalse($this->unitpay->validateSearchOrderRequiredAttributes($request, new Order()));
+        NotificationFacade::assertSentTo(new Notifiable(), Notification::class);
+    }
+
+    /** @test */
+    public function validate_search_order_required_attributes_true()
+    {
+        $request = new Request([
+            'params' => [
+                'orderStatus' => 'paid',
+                'orderSum' => '999',
+                'orderCurrency' => 'RUB',
+            ],
+        ]);
+
+        $order =  new Order([
+            'orderSum' =>  '999',
+            'orderCurrency' => 'RUB',
+            'orderStatus' => 'paid'
+        ]);
+
+        $this->assertTrue($this->unitpay->validateSearchOrderRequiredAttributes($request, $order));
+    }
+
+    /** @test */
+    public function validate_search_order_required_attributes_compare_sum_and_currency_false()
+    {
+        $request = new Request([
+            'params' => [
+                'orderStatus' => 'paid',
+                'orderSum' => '0',
+                'orderCurrency' => 'USD',
+            ],
+        ]);
+
+        $order =  new Order([
+            'orderSum' =>  '999',
+            'orderCurrency' => 'RUB',
+            'orderStatus' => 'paid'
+        ]);
+
+        $this->assertFalse($this->unitpay->validateSearchOrderRequiredAttributes($request, $order ));
+        NotificationFacade::assertSentTo(new Notifiable(), Notification::class);
     }
 
     /** @test */
@@ -277,18 +324,17 @@ class UnitPayTest extends TestCase
     /** @test */
     public function payOrderFromGate_method_check_SearchOrderFilterPaid()
     {
-        $this->app['config']->set('unitpay.searchOrderFilter', [Order::class, 'SearchOrderFilterPaid']);
-        $request = $this->create_test_request('check', 'ec61edc55b99b7b62d8157dffd88895d72250e02163b1a60cd5f52d48d8a7015');
+        $this->app['config']->set('unitpay.searchOrderFilter', [Order::class, 'SearchOrderFilterPaidforPayOrderFromGate']);
+        $request = $this->create_test_request('check');
         $request->server->set('REMOTE_ADDR', '127.0.0.1');
         $this->assertArrayHasKey('result', $this->unitpay->payOrderFromGate($request));
-
         NotificationFacade::assertSentTo(new Notifiable(), Notification::class);
     }
 
     /** @test */
     public function payOrderFromGate_method_pay_SearchOrderFilterPaid()
     {
-        $this->app['config']->set('unitpay.searchOrderFilter', [Order::class, 'SearchOrderFilterNotPaid']);
+        $this->app['config']->set('unitpay.searchOrderFilter', [Order::class, 'SearchOrderFilterPaidforPayOrderFromGate']);
         $this->app['config']->set('unitpay.paidOrderFilter', [Order::class, 'PaidOrderFilter']);
         $request = $this->create_test_request('pay');
 

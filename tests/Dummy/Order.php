@@ -2,31 +2,58 @@
 
 namespace ActionM\UnitPay\Test\Dummy;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
-class Order
+class Order extends Model
 {
+
+    protected $fillable = [
+        'orderSum',
+        'orderCurrency',
+        'orderStatus'
+    ];
+
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+    }
+
     public static function SearchOrderFilterFails(Request $request, $order_id)
     {
         return false;
     }
-
-    public static function SearchOrderFilterPaid(Request $request, $order_id)
+    public static function SearchOrderFilterPaidforPayOrderFromGate(Request $request, $order_id, $orderStatus ='paid', $orderSum = '1', $orderCurrency = '1')
     {
-        return [
-               'orderSum' => '12345',
-               'orderCurrency' => 'RUB',
-               'orderStatus' => 'paid',
-        ];
+        $order =  new Order([
+            'orderSum' =>  $orderSum,
+            'orderCurrency' => $orderCurrency,
+            'orderStatus' => $orderStatus
+        ]);
+
+        return $order;
     }
 
-    public static function SearchOrderFilterNotPaid(Request $request, $order_id)
+    public static function SearchOrderFilterPaid(Request $request, $order_id, $orderStatus ='paid', $orderSum = '12345', $orderCurrency = 'RUB')
     {
-        return [
-            'orderSum' => '',
-            'orderCurrency' => 'RUB',
-            'orderStatus' => 'not_paid',
-        ];
+        $order =  new Order([
+            'orderSum' =>  $orderSum,
+            'orderCurrency' => $orderCurrency,
+            'orderStatus' => $orderStatus
+        ]);
+
+        return $order;
+    }
+
+    public static function SearchOrderFilterNotPaid(Request $request, $order_id, $orderStatus ='no_paid', $orderSum = '', $orderCurrency = 'RUB')
+    {
+        $order =  new Order([
+            'orderSum' =>  $orderSum,
+            'orderCurrency' => $orderCurrency,
+            'orderStatus' => $orderStatus
+        ]);
+
+        return $order;
     }
 
     public static function PaidOrderFilterFails(Request $request, $order)
@@ -38,4 +65,5 @@ class Order
     {
         return true;
     }
+
 }

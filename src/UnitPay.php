@@ -9,7 +9,6 @@ use ActionM\UnitPay\Exceptions\InvalidConfiguration;
 
 class UnitPay
 {
-
     public function __construct()
     {
     }
@@ -30,7 +29,7 @@ class UnitPay
     }
 
     /**
-     * Return JSON error message
+     * Return JSON error message.
      * @param $message
      * @return mixed
      */
@@ -42,7 +41,7 @@ class UnitPay
     }
 
     /**
-     * Return JSON success message
+     * Return JSON success message.
      * @param $message
      * @return mixed
      */
@@ -101,6 +100,7 @@ class UnitPay
         unset($params['sign'], $params['signature']);
         array_push($params, $secretKey);
         array_unshift($params, $method);
+
         return hash('sha256', implode('{up}', $params));
     }
 
@@ -252,7 +252,7 @@ class UnitPay
     }
 
     /**
-     * Validate the required attributes of the found order
+     * Validate the required attributes of the found order.
      * @param Request $request
      * @param $order
      * @return bool
@@ -279,7 +279,7 @@ class UnitPay
         // compare order attributes vs request params
         $attr = ['orderSum', 'orderCurrency'];
         foreach ($attr as $k => $value) {
-            if ( $order->getAttribute($value) != $request->input('params.'.$value) ) {
+            if ($order->getAttribute($value) != $request->input('params.'.$value)) {
                 $this->eventFillAndSend('unitpay.error', $value.'Invalid', $request);
 
                 return false;

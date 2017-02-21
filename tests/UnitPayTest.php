@@ -265,10 +265,10 @@ class UnitPayTest extends TestCase
             ],
         ]);
 
-        $order =  new Order([
+        $order = new Order([
             'orderSum' =>  '999',
             'orderCurrency' => 'RUB',
-            'orderStatus' => 'paid'
+            'orderStatus' => 'paid',
         ]);
 
         $this->assertTrue($this->unitpay->validateSearchOrderRequiredAttributes($request, $order));
@@ -285,13 +285,13 @@ class UnitPayTest extends TestCase
             ],
         ]);
 
-        $order =  new Order([
+        $order = new Order([
             'orderSum' =>  '999',
             'orderCurrency' => 'RUB',
-            'orderStatus' => 'paid'
+            'orderStatus' => 'paid',
         ]);
 
-        $this->assertFalse($this->unitpay->validateSearchOrderRequiredAttributes($request, $order ));
+        $this->assertFalse($this->unitpay->validateSearchOrderRequiredAttributes($request, $order));
         NotificationFacade::assertSentTo(new Notifiable(), Notification::class);
     }
 

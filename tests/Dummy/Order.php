@@ -2,16 +2,15 @@
 
 namespace ActionM\UnitPay\Test\Dummy;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
-
     protected $fillable = [
         'orderSum',
         'orderCurrency',
-        'orderStatus'
+        'orderStatus',
     ];
 
     public function __construct(array $attributes = [])
@@ -23,34 +22,35 @@ class Order extends Model
     {
         return false;
     }
-    public static function SearchOrderFilterPaidforPayOrderFromGate(Request $request, $order_id, $orderStatus ='paid', $orderSum = '1', $orderCurrency = '1')
+
+    public static function SearchOrderFilterPaidforPayOrderFromGate(Request $request, $order_id, $orderStatus = 'paid', $orderSum = '1', $orderCurrency = '1')
     {
-        $order =  new Order([
+        $order = new self([
             'orderSum' =>  $orderSum,
             'orderCurrency' => $orderCurrency,
-            'orderStatus' => $orderStatus
+            'orderStatus' => $orderStatus,
         ]);
 
         return $order;
     }
 
-    public static function SearchOrderFilterPaid(Request $request, $order_id, $orderStatus ='paid', $orderSum = '12345', $orderCurrency = 'RUB')
+    public static function SearchOrderFilterPaid(Request $request, $order_id, $orderStatus = 'paid', $orderSum = '12345', $orderCurrency = 'RUB')
     {
-        $order =  new Order([
+        $order = new self([
             'orderSum' =>  $orderSum,
             'orderCurrency' => $orderCurrency,
-            'orderStatus' => $orderStatus
+            'orderStatus' => $orderStatus,
         ]);
 
         return $order;
     }
 
-    public static function SearchOrderFilterNotPaid(Request $request, $order_id, $orderStatus ='no_paid', $orderSum = '', $orderCurrency = 'RUB')
+    public static function SearchOrderFilterNotPaid(Request $request, $order_id, $orderStatus = 'no_paid', $orderSum = '', $orderCurrency = 'RUB')
     {
-        $order =  new Order([
+        $order = new self([
             'orderSum' =>  $orderSum,
             'orderCurrency' => $orderCurrency,
-            'orderStatus' => $orderStatus
+            'orderStatus' => $orderStatus,
         ]);
 
         return $order;
@@ -65,5 +65,4 @@ class Order extends Model
     {
         return true;
     }
-
 }

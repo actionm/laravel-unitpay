@@ -267,7 +267,7 @@ class UnitPay
         }
 
         // check required found order attributes
-        $attr = ['orderStatus', 'orderSum', 'orderCurrency'];
+        $attr = ['UNITPAY_orderStatus', 'UNITPAY_orderSum', 'UNITPAY_orderCurrency'];
 
         foreach ($attr as $k => $value) {
             if (! $order->getAttribute($value)) {
@@ -278,9 +278,9 @@ class UnitPay
         }
 
         // compare order attributes vs request params
-        $attr = ['orderSum', 'orderCurrency'];
+        $attr = ['UNITPAY_orderSum', 'UNITPAY_orderCurrency'];
         foreach ($attr as $k => $value) {
-            if ($order->getAttribute($value) != $request->input('params.'.$value)) {
+            if ($order->getAttribute($value) != $request->input('params.'.str_replace('UNITPAY_','',$value))) {
                 $this->eventFillAndSend('unitpay.error', $value.'Invalid', $request);
 
                 return false;
@@ -339,7 +339,7 @@ class UnitPay
         }
 
         // unset the custom order attributes for Eloquent support
-        unset($order['orderSum'], $order['orderCurrency'], $order['orderStatus']);
+        unset($order['UNITPAY_orderSum'], $order['UNITPAY_orderCurrency'], $order['UNITPAY_orderStatus']);
 
         // Run PaidOrderFilter callback
         return $callable($request, $order);
@@ -378,7 +378,7 @@ class UnitPay
 
         // If method pay and current order status is paid
         // return success response and notify info
-        if (mb_strtolower($order->orderStatus) === 'paid') {
+        if (mb_strtolower($order->UNITPAY_orderStatus) === 'paid') {
             $this->eventFillAndSend('unitpay.info', 'order already paid', $request);
 
             return $this->responseOK('OK');

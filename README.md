@@ -144,12 +144,12 @@ class ExampleController extends Controller
         $order = Order::where('unique_id', $order_id)->first();
 
         if ($order) {
-            $order['orderSum'] = $order->amount; // from your database
-            $order['orderCurrency'] = 'RUB';  // from your database
+            $order['UNITPAY_orderSum'] = $order->amount; // from your database
+            $order['UNITPAY_orderCurrency'] = 'RUB';  // from your database
 
             // if the current_order is already paid in your database, return strict "paid"; 
             // if not, return something else
-            $order['orderStatus'] = $order->order_status; // from your database
+            $order['UNITPAY_orderStatus'] = $order->order_status; // from your database
             return $order;
         }
 

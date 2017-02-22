@@ -268,9 +268,9 @@ class UnitPayTest extends TestCase
         ]);
 
         $order = new Order([
-            'orderSum' =>  '999',
-            'orderCurrency' => 'RUB',
-            'orderStatus' => 'paid',
+            'UNITPAY_orderSum' =>  '999',
+            'UNITPAY_orderCurrency' => 'RUB',
+            'UNITPAY_orderStatus' => 'paid',
         ]);
 
         $this->assertTrue($this->unitpay->validateSearchOrderRequiredAttributes($request, $order));
@@ -288,9 +288,9 @@ class UnitPayTest extends TestCase
         ]);
 
         $order = new Order([
-            'orderSum' =>  '999',
-            'orderCurrency' => 'RUB',
-            'orderStatus' => 'paid',
+            'UNITPAY_orderSum' =>  '999',
+            'UNITPAY_orderCurrency' => 'RUB',
+            'UNITPAY_orderStatus' => 'paid',
         ]);
 
         $this->assertFalse($this->unitpay->validateSearchOrderRequiredAttributes($request, $order));

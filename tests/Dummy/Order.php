@@ -8,9 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Order extends Model
 {
     protected $fillable = [
-        'orderSum',
-        'orderCurrency',
-        'orderStatus',
+        'UNITPAY_orderSum',
+        'UNITPAY_orderCurrency',
+        'UNITPAY_orderStatus',
     ];
 
     public function __construct(array $attributes = [])
@@ -26,9 +26,9 @@ class Order extends Model
     public static function SearchOrderFilterPaidforPayOrderFromGate(Request $request, $order_id, $orderStatus = 'paid', $orderSum = '1', $orderCurrency = '1')
     {
         $order = new self([
-            'orderSum' =>  $orderSum,
-            'orderCurrency' => $orderCurrency,
-            'orderStatus' => $orderStatus,
+            'UNITPAY_orderSum' =>  $orderSum,
+            'UNITPAY_orderCurrency' => $orderCurrency,
+            'UNITPAY_orderStatus' => $orderStatus,
         ]);
 
         return $order;
@@ -37,9 +37,9 @@ class Order extends Model
     public static function SearchOrderFilterPaid(Request $request, $order_id, $orderStatus = 'paid', $orderSum = '12345', $orderCurrency = 'RUB')
     {
         $order = new self([
-            'orderSum' =>  $orderSum,
-            'orderCurrency' => $orderCurrency,
-            'orderStatus' => $orderStatus,
+            'UNITPAY_orderSum' =>  $orderSum,
+            'UNITPAY_orderCurrency' => $orderCurrency,
+            'UNITPAY_orderStatus' => $orderStatus,
         ]);
 
         return $order;
@@ -48,9 +48,9 @@ class Order extends Model
     public static function SearchOrderFilterNotPaid(Request $request, $order_id, $orderStatus = 'no_paid', $orderSum = '', $orderCurrency = 'RUB')
     {
         $order = new self([
-            'orderSum' =>  $orderSum,
-            'orderCurrency' => $orderCurrency,
-            'orderStatus' => $orderStatus,
+            'UNITPAY_orderSum' =>  $orderSum,
+            'UNITPAY_orderCurrency' => $orderCurrency,
+            'UNITPAY_orderStatus' => $orderStatus,
         ]);
 
         return $order;

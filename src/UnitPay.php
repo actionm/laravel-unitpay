@@ -279,7 +279,7 @@ class UnitPay
         // compare order attributes vs request params
         $attr = ['UNITPAY_orderSum', 'UNITPAY_orderCurrency'];
         foreach ($attr as $k => $value) {
-            if ($order->getAttribute($value) != $request->input('params.'.str_replace('UNITPAY_','',$value))) {
+            if ($order->getAttribute($value) != $request->input('params.'.str_replace('UNITPAY_', '', $value))) {
                 $this->eventFillAndSend('unitpay.error', $value.'Invalid', $request);
 
                 return false;

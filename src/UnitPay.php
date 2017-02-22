@@ -3,9 +3,8 @@
 namespace ActionM\UnitPay;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-
 use ActionM\UnitPay\Events\UnitPayEvent;
+use Illuminate\Support\Facades\Validator;
 use ActionM\UnitPay\Exceptions\InvalidConfiguration;
 
 class UnitPay

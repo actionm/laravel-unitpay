@@ -4,7 +4,6 @@ namespace ActionM\UnitPay;
 
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\ServiceProvider;
-use ActionM\UnitPay\Exceptions\InvalidConfiguration;
 
 class UnitPayServiceProvider extends ServiceProvider
 {
@@ -22,7 +21,6 @@ class UnitPayServiceProvider extends ServiceProvider
         ], 'views');
 
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'unitpay');
-
     }
 
     /**

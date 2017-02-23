@@ -23,7 +23,6 @@ class UnitPayServiceProvider extends ServiceProvider
 
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'unitpay');
 
-        $this->testingEnv();
     }
 
     /**
@@ -42,26 +41,5 @@ class UnitPayServiceProvider extends ServiceProvider
         $this->app->alias('unitpay', 'UnitPay');
 
         $this->app->singleton(UnitPayNotifier::class);
-    }
-
-    /**
-     * Not check config if testing env.
-     * @throws InvalidConfiguration
-     */
-    public function testingEnv()
-    {
-        if (! App::environment('testing')) {
-            $callable = config('unitpay.searchOrderFilter');
-
-            if (! is_callable($callable)) {
-                throw InvalidConfiguration::searchOrderFilterInvalid();
-            }
-
-            $callable = config('unitpay.paidOrderFilter');
-
-            if (! is_callable($callable)) {
-                throw InvalidConfiguration::orderPaidFilterInvalid();
-            }
-        }
     }
 }

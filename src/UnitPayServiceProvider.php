@@ -2,7 +2,6 @@
 
 namespace ActionM\UnitPay;
 
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\ServiceProvider;
 
 class UnitPayServiceProvider extends ServiceProvider

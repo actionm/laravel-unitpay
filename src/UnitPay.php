@@ -11,6 +11,7 @@ class UnitPay
 {
     public function __construct()
     {
+        // construct
     }
 
     /**

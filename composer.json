@@ -39,5 +39,15 @@
     },
     "config": {
         "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "ActionM\\UnitPay\\UnitPayServiceProvider"
+            ],
+            "aliases": {
+                "UnitPay": "ActionM\\UnitPay\\Facades\\UnitPay"
+            }
+        }
     }
 }
